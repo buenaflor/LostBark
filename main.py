@@ -52,7 +52,7 @@ class MyClient(discord.Client):
                 return i
         return -1
 
-    def remove_nonnumeric_chars(s)
+    def remove_nonnumeric_chars(s):
         return re.sub("[^0-9]", "", s)
     
 client = MyClient()
