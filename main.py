@@ -29,13 +29,13 @@ class MyClient(discord.Client):
                 combined_message_split = combined_message.split()
                 
                 ttl_price_temp = (next(s for s in combined_message_split if Options.TotalPriceOfProduct.value.replace("-", "") in s))
-                ttl_price = remove_nonnumeric_chars(ttl_price_temp)
+                ttl_price = re.sub("[^0-9]", "", ttl_price_temp)
 
                 exr_temp = next(s for s in combined_message_split if Options.ExchangeRate.value.replace("-", "") in s)
-                exr = remove_nonnumeric_chars(xr_temp)
+                exr = re.sub("[^0-9]", "", exr_temp)
 
                 amrcv_temp = next(s for s in combined_message_split if Options.AmountReceived.value.replace("-", "") in s)
-                amrcv = remove_nonnumeric_chars(amrcv_temp)
+                amrcv = re.sub("[^0-9]", "", amrcv_temp)
 
                 gold_per_bundle = (float(exr) * 0.95) * (float(ttl_price) / 100) / (float(amrcv) / 10)
 
@@ -45,15 +45,6 @@ class MyClient(discord.Client):
                     await message.channel.send("Gold price per bundle: " + str(gold_per_bundle))
             else:
                 await message.channel.send(Commands.MatsGoldPrice.usage())
-
-    def index_containing_substring(lst, substring):
-        for i, s in enumerate(lst):
-            if substring in s:
-                return i
-        return -1
-
-    def remove_nonnumeric_chars(s):
-        return re.sub("[^0-9]", "", s)
     
 client = MyClient()
 
