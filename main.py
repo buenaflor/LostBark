@@ -40,7 +40,7 @@ class MyClient(discord.Client):
                 amrcv_temp = next(s for s in combined_message_split if Options.AmountReceived.value.replace("-", "") in s)
                 amrcv = re.sub("[^0-9]", "", amrcv_temp)
 
-                if ttl_price is None | exr is None | amrcv is None:
+                if not ttl_price | not exr | not amrcv:
                     await message.channel.send(Commands.MatsGoldPrice.usage())
                 else:
                     gold_per_bundle = (float(exr) * 0.95) * (float(ttl_price) / 100) / (float(amrcv) / 10)
