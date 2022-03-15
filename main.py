@@ -26,7 +26,9 @@ class MyClient(discord.Client):
     async def on_message(self, message):
         print("Received message")
         if message.content.startswith(Commands.MatsGoldPrice.value):
+            print("Inside mats gold")
             if Options.TotalPriceOfProduct.value in message.content and Options.AmountReceived.value in message.content and Options.ExchangeRate.value in message.content:
+                print("Inside another if")
                 whitespace_trimmed = message.content.replace(" ", "")
                 combined_message = whitespace_trimmed.replace("-", " ")
                 combined_message_split = combined_message.split()
