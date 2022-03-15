@@ -40,16 +40,19 @@ class MyClient(discord.Client):
                 amrcv_temp = next(s for s in combined_message_split if Options.AmountReceived.value.replace("-", "") in s)
                 amrcv = re.sub("[^0-9]", "", amrcv_temp)
 
-                gold_per_bundle = (float(exr) * 0.95) * (float(ttl_price) / 100) / (float(amrcv) / 10)
-                res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Mats: " + ttl_price + " Crystals\nAmount of Mats: " + amrcv + "_\n\n"
-                if Options.PerItem.value in message.content:
-                    # Result per item
-                    res = res + "Gold price per item: " + "**" + str(gold_per_bundle / 10) + "**"
-                    await message.channel.send(res)
+                if ttl_price is None | exr is None | amrcv is None:
+                    await message.channel.send(Commands.MatsGoldPrice.usage())
                 else:
-                    # Result per bundle
-                    res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle) + "**"
-                    await message.channel.send(res)
+                    gold_per_bundle = (float(exr) * 0.95) * (float(ttl_price) / 100) / (float(amrcv) / 10)
+                    res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Mats: " + ttl_price + " Crystals\nAmount of Mats: " + amrcv + "_\n\n"
+                    if Options.PerItem.value in message.content:
+                        # Result per item
+                        res = res + "Gold price per item: " + "**" + str(gold_per_bundle / 10) + "**"
+                        await message.channel.send(res)
+                    else:
+                        # Result per bundle
+                        res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle) + "**"
+                        await message.channel.send(res)
             else:
                 await message.channel.send(Commands.MatsGoldPrice.usage())
     
