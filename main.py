@@ -24,6 +24,7 @@ class MyClient(discord.Client):
         print('Logged on as {0}!'.format(self.user))
 
     async def on_message(self, message):
+        print("Received message")
         if message.content.startswith(Commands.MatsGoldPrice.value):
             if Options.TotalPriceOfProduct.value in message.content and Options.AmountReceived.value in message.content and Options.ExchangeRate.value in message.content:
                 whitespace_trimmed = message.content.replace(" ", "")
@@ -43,7 +44,7 @@ class MyClient(discord.Client):
                 res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Mats: " + ttl_price + " Crystals\nAmount of Mats: " + amrcv + "_\n\n"
                 if Options.PerItem.value in message.content:
                     # Result per item
-                    res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle / 10) + "**"
+                    res = res + "Gold price per item: " + "**" + str(gold_per_bundle / 10) + "**"
                     print("Sending message...")
                     await message.channel.send(res)
                 else:
