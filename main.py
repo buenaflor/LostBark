@@ -47,11 +47,11 @@ class MyClient(discord.Client):
                     res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Mats: " + ttl_price + " Crystals\nAmount of Mats: " + amrcv + "_\n\n"
                     if Options.PerItem.value in message.content:
                         # Result per item
-                        res = res + "Gold price per item: " + "**" + str(gold_per_bundle / 10) + "**"
+                        res = res + "Gold price per item: " + "**" + str(round(gold_per_bundle / 10)) + "**"
                         await message.channel.send(res)
                     else:
                         # Result per bundle
-                        res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle) + "**"
+                        res = res + "Gold price per bundle: " + "**" + str(round(gold_per_bundle)) + "**"
                         await message.channel.send(res)
             else:
                 await message.channel.send(Commands.MatsGoldPrice.usage())
