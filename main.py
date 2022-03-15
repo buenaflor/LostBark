@@ -44,12 +44,15 @@ class MyClient(discord.Client):
                 if Options.PerItem.value in message.content:
                     # Result per item
                     res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle / 10) + "**"
+                    print("Sending message...")
                     await message.channel.send(res)
                 else:
                     # Result per bundle
                     res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle) + "**"
+                    print("Sending message...")
                     await message.channel.send(res)
             else:
+                print("Sending message...")
                 await message.channel.send(Commands.MatsGoldPrice.usage())
     
 client = MyClient()
