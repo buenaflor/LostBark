@@ -4,12 +4,13 @@ import re
 # todo: use more functions and isolated classes: formatting, conversion, etc...
 
 class Commands(enum.Enum):
-    MatsGoldPrice = "!matsprice"
+    # Mats to Gold
+    MatsGoldPrice = "!mtg"
 
     def usage(self):
         if self.value == Commands.MatsGoldPrice.value:
             # default return is gold per 10 bundle
-            return "Usage: !matsprice [-peritem] { -exr 1000 -amount 50 -totalprice 40 }"
+            return "Usage: !mtg [-peritem] { -exr 1000 -amount 50 -price 40 }"
         return "Usage not defined"
 
 class Options(enum.Enum):
@@ -17,7 +18,7 @@ class Options(enum.Enum):
     PerItem = "-peritem" 
     ExchangeRate = "-exr"
     AmountReceived = "-amount"
-    TotalPriceOfProduct = "-totalprice"
+    TotalPriceOfProduct = "-price"
 
 class MyClient(discord.Client):
     async def on_ready(self):
