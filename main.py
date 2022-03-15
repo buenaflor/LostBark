@@ -24,11 +24,8 @@ class MyClient(discord.Client):
         print('Logged on as {0}!'.format(self.user))
 
     async def on_message(self, message):
-        print("Received message: " + message.content)
         if message.content.startswith(Commands.MatsGoldPrice.value):
-            print("Inside mats gold")
             if Options.TotalPriceOfProduct.value in message.content and Options.AmountReceived.value in message.content and Options.ExchangeRate.value in message.content:
-                print("Inside another if")
                 whitespace_trimmed = message.content.replace(" ", "")
                 combined_message = whitespace_trimmed.replace("-", " ")
                 combined_message_split = combined_message.split()
@@ -47,15 +44,12 @@ class MyClient(discord.Client):
                 if Options.PerItem.value in message.content:
                     # Result per item
                     res = res + "Gold price per item: " + "**" + str(gold_per_bundle / 10) + "**"
-                    print("Sending message...")
                     await message.channel.send(res)
                 else:
                     # Result per bundle
                     res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle) + "**"
-                    print("Sending message...")
                     await message.channel.send(res)
             else:
-                print("Sending message...")
                 await message.channel.send(Commands.MatsGoldPrice.usage())
     
 client = MyClient()
