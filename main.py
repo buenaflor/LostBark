@@ -1,21 +1,23 @@
 import discord, enum
 import re
 
+# todo: use more functions and isolated classes: formatting, conversion, etc...
+
 class Commands(enum.Enum):
     MatsGoldPrice = "!matsprice"
 
     def usage(self):
         if self.value == Commands.MatsGoldPrice.value:
             # default return is gold per 10 bundle
-            return "Usage: !matsprice [-peritem] { -exr 1000 -amrcv 50 -ttlprice 40 }"
+            return "Usage: !matsprice [-peritem] { -exr 1000 -amount 50 -totalprice 40 }"
         return "Usage not defined"
 
 class Options(enum.Enum):
     PerBundle = "-bundle"
     PerItem = "-peritem" 
     ExchangeRate = "-exr"
-    AmountReceived = "-amrcv"
-    TotalPriceOfProduct = "-ttlprice"
+    AmountReceived = "-amount"
+    TotalPriceOfProduct = "-totalprice"
 
 class MyClient(discord.Client):
     async def on_ready(self):
@@ -38,11 +40,15 @@ class MyClient(discord.Client):
                 amrcv = re.sub("[^0-9]", "", amrcv_temp)
 
                 gold_per_bundle = (float(exr) * 0.95) * (float(ttl_price) / 100) / (float(amrcv) / 10)
-
+                res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Mats: " + ttl_price + " Crystals\nAmount of Mats: " + amrcv + "_\n\n"
                 if Options.PerItem.value in message.content:
-                    await message.channel.send("Gold price per item: " + str(gold_per_bundle / 10))
+                    # Result per item
+                    res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle / 10) + "**"
+                    await message.channel.send(res)
                 else:
-                    await message.channel.send("Gold price per bundle: " + str(gold_per_bundle))
+                    # Result per bundle
+                    res = res + "Gold price per bundle: " + "**" + str(gold_per_bundle) + "**"
+                    await message.channel.send(res)
             else:
                 await message.channel.send(Commands.MatsGoldPrice.usage())
     
