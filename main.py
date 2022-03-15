@@ -24,7 +24,7 @@ class MyClient(discord.Client):
         print('Logged on as {0}!'.format(self.user))
 
     async def on_message(self, message):
-        print("Received message: " + message)
+        print("Received message: " + message.content)
         if message.content.startswith(Commands.MatsGoldPrice.value):
             print("Inside mats gold")
             if Options.TotalPriceOfProduct.value in message.content and Options.AmountReceived.value in message.content and Options.ExchangeRate.value in message.content:
@@ -59,6 +59,4 @@ class MyClient(discord.Client):
                 await message.channel.send(Commands.MatsGoldPrice.usage())
     
 client = MyClient()
-
-# This is bad practice, never expose your token by hardcoding it
-client.run('OTUzMDU1MDIwMTA5MTY0NzE0.Yi-_pw.A4cyjrzP0p8b6vfN_H1hQ7psexI')
+client.run('process.env.token')
