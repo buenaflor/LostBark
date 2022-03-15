@@ -45,7 +45,7 @@ class MyClient(discord.Client):
                 else:
                     gold_per_bundle = (float(exr) / 95) * float(ttl_price) / (float(amrcv) / 10)
                     res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Product: " + ttl_price + " Crystals\nAmount Received: " + amrcv + "_\n\n"
-                    if Options.PerUnit.value in message.content:
+                    if Options.PerUnit.value in message.content or amrcv == 1:
                         # Result per unit
                         if amrcv == 1:
                             res = res + "Gold price per unit: " + "**" + str(round(gold_per_bundle, 2)) + "**"
