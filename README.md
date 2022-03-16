@@ -1,4 +1,6 @@
 # LostBark
 
 ## ToDo
-round decimal places to 2 digits
+add more stuff?? 
+
+lost ark has no official api so it has to be scraped from somewhere
