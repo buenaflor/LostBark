@@ -1,5 +1,5 @@
 import discord, enum
-import re
+import re, os
 
 # todo: use more functions and isolated classes: formatting, conversion, etc...
 
@@ -57,5 +57,5 @@ class MyClient(discord.Client):
     
 client = MyClient()
 
-# This is bad practice, never expose your token by hardcoding it
-client.run('OTUzMDU1MDIwMTA5MTY0NzE0.Yi-_pw.A4cyjrzP0p8b6vfN_H1hQ7psexI')
+TOKEN = os.environ.get('TOKEN')
+client.run(TOKEN)
