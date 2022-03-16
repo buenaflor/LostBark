@@ -16,6 +16,7 @@ class Commands(enum.Enum):
 class Options(enum.Enum):
     PerBundle = "-bundle"
     PerUnit = "-perunit" 
+    PerUnit = "-perbundle" 
     ExchangeRate = "-exr"
     AmountReceived = "-amount"
     TotalPriceOfProduct = "-price"
@@ -43,18 +44,15 @@ class MyClient(discord.Client):
                 if not ttl_price or not exr or not amrcv:
                     await message.channel.send(Commands.MatsGoldPrice.usage())
                 else:
-                    gold_per_bundle = (float(exr) / 95) * float(ttl_price) / (float(amrcv) / 10)
+                    gold_per_unit = (float(exr) / 95) * float(ttl_price) / (float(amrcv)
                     res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Product: " + ttl_price + " Crystals\nAmount Received: " + amrcv + "_\n\n"
-                    if Options.PerUnit.value in message.content or amrcv == 1:
-                        # Result per unit
-                        if amrcv == 1:
-                            res = res + "Gold price per unit: " + "**" + str(round(gold_per_bundle, 2)) + "**"
-                        else:
-                            res = res + "Gold price per unit: " + "**" + str(round(gold_per_bundle / 10, 2)) + "**"
+                    if Options.PerBundle.value in message.content:
+                        # Result per bundle
+                        res = res + "Gold price per 10 bundle: " + "**" + str(round(gold_per_unit * 10, 2)) + "**"
                         await message.channel.send(res)
                     else:
-                        # Result per bundle
-                        res = res + "Gold price per bundle: " + "**" + str(round(gold_per_bundle, 2)) + "**"
+                        # Result per unit
+                        res = res + "Gold price per unit: " + "**" + str(round(gold_per_unit, 2)) + "**"
                         await message.channel.send(res)
             else:
                 await message.channel.send(Commands.MatsGoldPrice.usage())
