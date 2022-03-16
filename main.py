@@ -42,7 +42,7 @@ class MyClient(discord.Client):
                 if not ttl_price or not exr or not amrcv:
                     await message.channel.send(Commands.MatsGoldPrice.usage())
                 else:
-                    gold_per_unit = (float(exr) / 95) * float(ttl_price) / (float(amrcv)
+                    gold_per_unit = (float(exr) / 95) * float(ttl_price) / float(amrcv)
                     res = "_Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\nCost of Product: " + ttl_price + " Crystals\nAmount Received: " + amrcv + "_\n\n"
                     if Options.PerBundle.value in message.content:
                         # Result per bundle
