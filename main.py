@@ -4,13 +4,14 @@ import re, os
 # todo: use more functions and isolated classes: formatting, conversion, etc...
 
 class Commands(enum.Enum):
-    # Mats to Gold
     MatsGoldPrice = "!mtg"
+    Daily = "!daily"
 
+    # Returns a text of usage in case of false input
     def usage(self):
         if self.value == Commands.MatsGoldPrice.value:
-            # default return is gold per 10 bundle
-            return "Usage: !mtg [-bundle] { -exr 1000 -amount 50 -price 40 }"
+            # default return is gold per unit
+            return "Usage: !mtg [-bundle] { -exr 1000 -amount 50 -price 40 }"        
         return "Usage not defined"
 
 class Options(enum.Enum):
@@ -54,6 +55,10 @@ class MyClient(discord.Client):
                         await message.channel.send(res)
             else:
                 await message.channel.send(Commands.MatsGoldPrice.usage())
+
+        if message.content.startswith(Commands.Daily.value):
+            #todo res = ""
+            await message.channel.send(res)
     
 client = MyClient()
 
