@@ -10,13 +10,11 @@ class Commands(enum.Enum):
     def usage(self):
         if self.value == Commands.MatsGoldPrice.value:
             # default return is gold per 10 bundle
-            return "Usage: !mtg [-perunit] { -exr 1000 -amount 50 -price 40 }"
+            return "Usage: !mtg [-bundle] { -exr 1000 -amount 50 -price 40 }"
         return "Usage not defined"
 
 class Options(enum.Enum):
     PerBundle = "-bundle"
-    PerUnit = "-perunit" 
-    PerUnit = "-perbundle" 
     ExchangeRate = "-exr"
     AmountReceived = "-amount"
     TotalPriceOfProduct = "-price"
