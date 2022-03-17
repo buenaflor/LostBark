@@ -1,27 +1,17 @@
+import asyncio
 import os
 import enum
 
 import discord
+from discord.ext import commands
+from discord_slash import SlashCommand, manage_commands
 
 from formatter import bold, italic
-from utils import remove_nonnumeric_chars, get_first_occurrence
-
 
 # todo: use more functions and isolated classes: formatting, conversion, etc...
 
-class Commands(enum.Enum):
-    MatsGoldPrice = "!mtg"
-    Daily = "!daily"
-    Weekly = "!weekly"
-    AllCommands = "!commands"
-
-    # Returns a text of usage in case of false input
-    def usage(self):
-        if self.value == Commands.MatsGoldPrice.value:
-            # default return is gold per unit
-            return "Usage: !mtg [-bundle] { -exr 1000 -amount 50 -price 40 }"
-        return "Usage not defined"
-
+bot = commands.Bot(command_prefix='/')
+slash = SlashCommand(bot, sync_commands=True)
 
 class Options(enum.Enum):
     PerBundle = "-bundle"
@@ -29,71 +19,48 @@ class Options(enum.Enum):
     AmountReceived = "-amount"
     TotalPriceOfProduct = "-price"
 
+@slash.slash(name="mtg", description="Converts maris shop products worth to gold. Per default it calculates gold per product unit",
+             options=[manage_commands.create_option(name="exchange_rate", description="Exchange rate from gold to crystals", option_type=3, required=True),
+                      manage_commands.create_option(name="price", description="Price of the product in crystals", option_type=3, required=True),
+                      manage_commands.create_option(name="amount_received", description="Amount received of the product", option_type=3, required=True),
+                      manage_commands.create_option(name="bundle", description="Calculates the gold price of the product bundle", option_type=5, required=False)])
+async def mtg(ctx, exchange_rate, price, amount_received, bundle = None):
+    gold_per_unit = (float(exchange_rate) / 95) * float(price) / float(amount_received)
+    res = "Crystal Exchange Rate: " + exchange_rate + " Gold for 95 Crystals\n"
+    res += "Cost of Product: " + price + " Crystals\n"
+    res += "Amount Received: " + amount_received
+    res = italic(res) + "\n\n"
 
-class MyClient(discord.Client):
-    async def on_ready(self):
-        print('Logged on as {0}!'.format(self.user))
+    if bundle:
+        # Result per bundle
+        res = res + "Gold price per 10 bundle: " + bold(str(round(gold_per_unit * 10, 2)))
+        await ctx.send(res)
+    else:
+        # Result per unit
+        res = res + "Gold price per unit: " + bold(str(round(gold_per_unit, 2)))
+        await ctx.send(res)
 
-    async def on_message(self, message):
-        if message.content.startswith(Commands.MatsGoldPrice.value):
-            if Options.TotalPriceOfProduct.value in message.content and Options.AmountReceived.value in message.content and Options.ExchangeRate.value in message.content:
-                whitespace_trimmed = message.content.replace(" ", "")
-                combined_message = whitespace_trimmed.replace("-", " ")
-                combined_message_split = combined_message.split()
+@slash.slash(name="dailies", description="Lists tasks that can be done daily")
+async def dailies(ctx):
+    res = "2x Chaos Dungeons\n"
+    res += "2x Guardian Raids\n"
+    res += "3x Una's Tasks\n"
+    res += "Anguished Isle\n"
+    res += "Chaos Gate / Field Boss / Adventure Island\n"
+    res += "Guild Task / Guild Donation / Guild Research Support\n"
+    await ctx.send(italic(res))
 
-                ttl_price_temp = get_first_occurrence(combined_message_split, Options.TotalPriceOfProduct.value.replace("-", ""))
-                ttl_price = remove_nonnumeric_chars(ttl_price_temp)
+@slash.slash(name="weeklies", description="Lists tasks that can be done weekly")
+async def dailies(ctx):
+    res = "Abyss Dungeon\n"
+    res += "3x Weekly Una's Tasks\n"
+    res += "Buy Guild Shop Products\n"
+    res += "Buy Mats on Pirate Ship\n"
+    res += "Buy Mats on Dungeon Exchange Shop\n"
+    res += "Buy Mats on Grand Prix\n"
+    await ctx.send(italic(res))
 
-                exr_temp = get_first_occurrence(combined_message_split, Options.ExchangeRate.value.replace("-", ""))
-                exr = remove_nonnumeric_chars(exr_temp)
 
-                amrcv_temp = get_first_occurrence(combined_message_split, Options.AmountReceived.value.replace("-", ""))
-                amrcv = remove_nonnumeric_chars(amrcv_temp)
+#client.run(os.environ.get('token'))
 
-                if not ttl_price or not exr or not amrcv:
-                    await message.channel.send(Commands.MatsGoldPrice.usage())
-                else:
-                    gold_per_unit = (float(exr) / 95) * float(ttl_price) / float(amrcv)
-                    res = "Crystal Exchange Rate: " + exr + " Gold for 95 Crystals\n"
-                    res += "Cost of Product: " + ttl_price + " Crystals\n"
-                    res += "Amount Received: " + amrcv
-                    res = italic(res) + "\n\n"
-
-                    if Options.PerBundle.value in message.content:
-                        # Result per bundle
-                        res = res + "Gold price per 10 bundle: " + bold(str(round(gold_per_unit * 10, 2)))
-                        await message.channel.send(res)
-                    else:
-                        # Result per unit
-                        res = res + "Gold price per unit: " + bold(str(round(gold_per_unit, 2)))
-                        await message.channel.send(res)
-            else:
-                await message.channel.send(Commands.MatsGoldPrice.usage())
-
-        if message.content.startswith(Commands.Daily.value):
-            res = "2x Chaos Dungeons\n"
-            res += "2x Guardian Raids\n"
-            res += "3x Una's Tasks\n"
-            res += "Anguished Isle\n"
-            res += "Chaos Gate / Field Boss / Adventure Island\n"
-            res += "Guild Task / Guild Donation / Guild Research Support\n"
-            await message.channel.send(italic(res))
-
-        if message.content.startswith(Commands.Weekly.value):
-            res = "Abyss Dungeon\n"
-            res += "3x Weekly Una's Tasks\n"
-            res += "Buy Guild Shop Products\n"
-            res += "Buy Mats on Pirate Ship\n"
-            res += "Buy Mats on Dungeon Exchange Shop\n"
-            res += "Buy Mats on Grand Prix\n"
-            await message.channel.send(italic(res))
-
-        if message.content.startswith(Commands.AllCommands.value):
-            res = bold("!mtg") + " -> Mari's Shop products to gold\n"
-            res += bold("!daily") + " -> List of daily tasks\n"
-            res += bold("!weekly") + " -> List of weekly tasks\n"
-            await message.channel.send(italic(res))
-
-client = MyClient()
-
-client.run(os.environ.get('token'))
+bot.run("OTUzMDU1MDIwMTA5MTY0NzE0.Yi-_pw.pdmUXzfpuxiMgN0j4kS2T76Y9QM")
