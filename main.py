@@ -45,6 +45,37 @@ class TravelingMerchants(enum.Enum):
     Malone = "Malone"
     Dorella = "Dorella"
 
+    def maps(self):
+        match self.value:
+            case self.Ben.value:
+                return ["Log Hill", "Ankumo Mountain", "Rethramis Border"]
+            case self.Lucas.value:
+                return ["Saland Hill", "Ankumo Mountain"]
+            case self.Malone.value:
+                return ["Mount Zagoras", "Lakebar", "Medrick Monastery", "Bilbrin Forest", "Battlebound Plains"]
+            case self.Morris.value:
+                return ["Dyorika Plains", "Sunbright Hill", "Flowring Orchard"]
+            case self.Burt.value:
+                return ["Blackrose Chapel", "Leyar Terrace", "Borea's Domain", "Croconys Seashore"]
+            case self.Oliver.value:
+                return ["Seaswept Woods", "Sweetwater Forest", "Skyreach Steppe", "Forest of Giants"]
+            case self.Mac.value:
+                return ["Delphi Township", "Rattan Hill", "Melody Forest", "Twilight Mists", "Prisma Valley"]
+            case self.Nox.value:
+                return ["Arid Path", "Scraplands", "Nebel Horn", "Windbringer Hill", "Tottrich", "Riza Falls"]
+            case self.Peter.value:
+                return ["Port Krona", "Parna Forest", "Fesnar Highland", "Vernese Forest", "Balankar Mountain"]
+            case self.Jeffrey.value:
+                return ["Frozen Sea", "Bitterwind Hill", "Iceblood Plateau", "Lake Eternity", "Icewing Heights"]
+            case self.Aricer.value:
+                return ["Lake Shiverwave", "Glass Lotus Lake", "Breezesome Brae", "Xeneela Ruins", "Elzowin's Shade"]
+            case self.Laitir.value:
+                return ["Yorn's Cradle", "Unfinished Garden", "Black Anvil Mine", "Iron Hammer Mine", "Hall of Promise"]
+            case self.Dorella.value:
+                return ["Feiton"]
+            case self.Rayni.value:
+                return ["Tideshelf Path", "Starsand Beach", "Tikatika Colony", "Secret Forest"]
+
     def continent(self):
         match self.value:
             case self.Burt.value | self.Morris.value:
@@ -146,7 +177,7 @@ async def traveling_merchants(ctx, merchant_name):
     embed.add_field(name="Merchant", value=merchant_name, inline=True)
     embed.add_field(name="Continent", value=TravelingMerchants(merchant_name).continent(), inline=True)
     embed.add_field(name="Schedule", value=list_to_string(TravelingMerchants(merchant_name).schedule()), inline=True)
-    # todo: embed.add_field(name="Maps", value="Blackrose Chapel", inline=False)
+    embed.add_field(name="Maps", value=list_to_string(TravelingMerchants(merchant_name).maps()), inline=False)
     embed.set_author(name="BarkBot", icon_url="https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/273797272_437110278150626_6407164352942042066_n.jpg?stp=cp0_dst-jpg_e15_q65_s110x80&_nc_cat=1&ccb=1-5&_nc_sid=85a577&efg=eyJpIjoidCJ9&_nc_ohc=vvulOrY4KyoAX8HbPBY&_nc_ht=scontent-vie1-1.xx&oh=00_AT-zPMPFR8p1MvtszS52sp7SFIFPWHjDjooMZEQftmUx7g&oe=623CD5B1")
 
     beatrice_time = datetime.utcnow() + timedelta(hours=1)
@@ -199,5 +230,4 @@ async def weeklies(ctx):
     embed.set_author(name="BarkBot", icon_url="https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/273797272_437110278150626_6407164352942042066_n.jpg?stp=cp0_dst-jpg_e15_q65_s110x80&_nc_cat=1&ccb=1-5&_nc_sid=85a577&efg=eyJpIjoidCJ9&_nc_ohc=vvulOrY4KyoAX8HbPBY&_nc_ht=scontent-vie1-1.xx&oh=00_AT-zPMPFR8p1MvtszS52sp7SFIFPWHjDjooMZEQftmUx7g&oe=623CD5B1")
     await ctx.send(embed=embed)
 
-bot.run("OTUzMDU1MDIwMTA5MTY0NzE0.Yi-_pw.rGg6ile-BUbpq0OVHlwEIOc-XRA")
-#bot.run(os.environ.get('token'))
+bot.run(os.environ.get('token'))
