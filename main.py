@@ -167,7 +167,7 @@ async def traveling_merchants(ctx, merchant_name):
 
     hours, minutes = current_min.seconds // 3600, current_min.seconds // 60 % 60
 
-    embed.add_field(name="Next Appearance", value="In " + str(hours) + ":" + str(minutes) + " hours", inline=False)
+    embed.add_field(name="Next Appearance", value="In " + f"{hours:02d}" + ":" + f"{minutes:02d}" + " hours", inline=False)
     embed.set_footer(text="Schedule times apply to AM and PM and only on EU Central Beatrice")
     await ctx.send(embed=embed)
 
