@@ -199,4 +199,4 @@ async def weeklies(ctx):
     await ctx.send(embed=embed)
 
 
-client.run(os.environ.get('token'))
+bot.run(os.environ.get('token'))
