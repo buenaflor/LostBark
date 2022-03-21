@@ -1,5 +1,6 @@
 import discord
 import enum
+import os
 from datetime import datetime, timedelta
 from discord.ext import commands
 from discord_slash import SlashCommand, manage_commands
