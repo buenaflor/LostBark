@@ -10,9 +10,8 @@ from formatter import bold, italic
 bot = commands.Bot(command_prefix='/')
 slash = SlashCommand(bot, sync_commands=True)
 
-def list_to_string(s):
-    str1 = " "
-    return (str1.join(s))
+def list_to_string(list, separator):
+    return (separator.join(list))
 
 class Continents(enum.Enum):
     EastLuterra = "East Luterra"
@@ -176,8 +175,8 @@ async def traveling_merchants(ctx, merchant_name):
     embed = discord.Embed(color=0xFF5733)
     embed.add_field(name="Merchant", value=merchant_name, inline=True)
     embed.add_field(name="Continent", value=TravelingMerchants(merchant_name).continent(), inline=True)
-    embed.add_field(name="Schedule", value=list_to_string(TravelingMerchants(merchant_name).schedule()), inline=True)
-    embed.add_field(name="Maps", value=list_to_string(TravelingMerchants(merchant_name).maps()), inline=False)
+    embed.add_field(name="Schedule", value=list_to_string(TravelingMerchants(merchant_name).schedule(), " "), inline=True)
+    embed.add_field(name="Maps", value=list_to_string(TravelingMerchants(merchant_name).maps(), " | "), inline=False)
     embed.set_author(name="BarkBot", icon_url="https://scontent-vie1-1.xx.fbcdn.net/v/t39.30808-6/273797272_437110278150626_6407164352942042066_n.jpg?stp=cp0_dst-jpg_e15_q65_s110x80&_nc_cat=1&ccb=1-5&_nc_sid=85a577&efg=eyJpIjoidCJ9&_nc_ohc=vvulOrY4KyoAX8HbPBY&_nc_ht=scontent-vie1-1.xx&oh=00_AT-zPMPFR8p1MvtszS52sp7SFIFPWHjDjooMZEQftmUx7g&oe=623CD5B1")
 
     beatrice_time = datetime.utcnow() + timedelta(hours=1)
