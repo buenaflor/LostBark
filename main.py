@@ -156,8 +156,10 @@ async def traveling_merchants(ctx, merchant_name):
     format = '%H:%M'
     d = datetime.strptime(beatrice_time_hours_minutes, format)
     schedule_times = TravelingMerchants(merchant_name).schedule()
-
-    current_min = timedelta(hours=100)
+    split = schedule_times[0].split(":")
+    t_formatted = "{:s}:{:02s}".format(split[0], split[1])
+    t_d = datetime.strptime(t_formatted, format)
+    current_min = t_d - d
     for x in schedule_times:
         split = x.split(":")
         t_formatted = "{:s}:{:02s}".format(split[0], split[1])
